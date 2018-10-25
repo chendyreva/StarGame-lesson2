@@ -29,19 +29,26 @@ public class MenuScreen extends Base2DScreen {
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
         pos = new Vector2(0,0);
-        v = new Vector2(0.7f,0.5f);
+        v = new Vector2(0.5f,0.3f);
+        touch = new Vector2(0,0);
+        buf = new Vector2();
     }
-
+     
     @Override
     public void render(float delta) {
-        super.render(delta);
+      super.render(delta);
         Gdx.gl.glClearColor(0.28f, 0, 0.30f, 0.25f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        buf.set(touch);
+        if(buf.set(pos).len() > v.len()) {
+            pos.add(v);
+        } else {
+            pos.set(touch);
+        }
         batch.begin();
         batch.draw(img, pos.x, pos.y);
         batch.end();
-        pos.add(v);
-    }
+    }    
 
     @Override
     public void dispose() {
@@ -52,18 +59,10 @@ public class MenuScreen extends Base2DScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return super.touchDown(screenX, screenY, pointer, button);
-//  Button btn = btn.setOnClickListener(new img.OnClickListener());
-//        {
-//
-//            @Override
-//            public void onClick (Texture img);
-//            {
-//
-//                img.draw(ru.geekbrains.badlogic.gdx.graphics.Texture, 16, 16).translationYBy(100).alpha(0).setDuration(1000);
-//
-//            }
-//        }
+      touch.set(screenX, Gdx.graphics.getHeight() - screenY);
+        v.set(touch.cpy().sub(pos).setLength(0.5f));
+        return false;
+
     }
 }
 
